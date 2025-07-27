@@ -1,2 +1,2 @@
-import TripPlannerPage from '../../src/app/TripPlannerPage';
+import TripPlannerPage from './TripPlannerPage';
 export default TripPlannerPage;
