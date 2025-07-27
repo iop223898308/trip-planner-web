@@ -2,7 +2,7 @@
 "use client";
 
 import React, { useEffect, useState } from 'react';
-import { GoogleMap, Marker, useJsApiLoader } from '@react-google-maps/api';
+import { GoogleMap, useJsApiLoader } from '@react-google-maps/api';
 import { db } from '../firebase';
 import { collection, getDocs } from 'firebase/firestore';
 
@@ -43,8 +43,7 @@ export const MapViewer: React.FC<Props> = ({ tripId, date }) => {
 
       snapshot.docs.forEach(doc => {
         const slot = doc.data();
-        slot.options.forEach((opt: any) => {
-          if (opt.lat && opt.lng) {
+        slot.options.forEach((opt: OptionItem) => {          if (opt.lat && opt.lng) {
             options.push({ name: opt.name, lat: opt.lat, lng: opt.lng });
           }
         });
@@ -60,13 +59,15 @@ export const MapViewer: React.FC<Props> = ({ tripId, date }) => {
 
   return (
     <GoogleMap
-      mapContainerStyle={containerStyle}
-      center={locations[0] || defaultCenter}
-      zoom={14}
-    >
-      {locations.map((loc, i) => (
-        <Marker key={i} position={{ lat: loc.lat!, lng: loc.lng! }} title={loc.name} />
-      ))}
-    </GoogleMap>
+    mapContainerStyle={containerStyle}
+    center={
+      locations[0] && locations[0].lat !== undefined && locations[0].lng !== undefined
+        ? { lat: locations[0].lat, lng: locations[0].lng }
+        : defaultCenter
+    }
+    zoom={14}
+  >
+    {/* ... */}
+  </GoogleMap>
   );
 };
